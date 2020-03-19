@@ -1,10 +1,12 @@
-package p
+package main
+
 
 import (
 	"context"
 	"cloud.google.com/go/datastore"
 	"time"
-	"os"
+	"fmt"
+	
 )
 
 type Post struct {
@@ -12,14 +14,18 @@ type Post struct {
     PublishedAt  time.Time
 }
 
-var projectID = os.Getenv("GCP_PROJECT")
+func main(){
+	Dts()
+}
 
 
-func datastoreIssue() {
+func Dts() {
 
 	ctx := context.Background()
-	client, _ := datastore.NewClient(ctx, projectID)
-	_, _ = client.RunInTransaction(ctx, func(tx *datastore.Transaction) error {
+	
+	client, _ := datastore.NewClient(ctx, "wave26-sellbytel-methkal")
+	
+	opt, err := client.RunInTransaction(ctx, func(tx *datastore.Transaction) error {
 		
 		keys := []*datastore.Key{
 			datastore.NameKey("Post", "post1", nil),
@@ -62,4 +68,6 @@ func datastoreIssue() {
 
 		return nil
 	})
+	fmt.Println(err)
+	fmt.Println(opt)
 }
